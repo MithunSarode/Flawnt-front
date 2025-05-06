@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Results - Fiawnt</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>Flawnt</h1>
+        </header>
+        <div class="analysis-container">
+            <h2>Confirm Results</h2>
+            <img id="analysis-img" class="analysis-image" alt="Analyzed image">
+            <div class="analysis-results">
+                <div class="result-item">
+                    <div class="result-title">Skin Tone</div>
+                    <div class="result-value" id="skin-tone">Analyzing...</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-title">Undertone</div>
+                    <div class="result-value" id="undertone">Analyzing...</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-title">Recommended Colors</div>
+                    <div class="result-value" id="recommended-colors">Analyzing...</div>
+                </div>
+            </div>
+            <div class="action-buttons">
+                <button class="action-btn retake-btn" onclick="window.location.href='FrontEnd.html'">Take New Photo</button>
+                <button class="action-btn save-btn" onclick="saveAnalysis()">Save Results</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        window.onload = function() {
+            const capturedImage = localStorage.getItem('capturedImage');
+            if (capturedImage) {
+                document.getElementById('analysis-img').src = capturedImage;
+                // Simulate analysis with a loading effect
+                setTimeout(showAnalysisResults, 2000);
+            }
+        }
+
+        function showAnalysisResults() {
+            // This is where you would typically integrate with your actual analysis API
+            // For now, we'll show some sample results
+            document.getElementById('skin-tone').textContent = 'Medium';
+            document.getElementById('undertone').textContent = 'Warm';
+            document.getElementById('recommended-colors').textContent = 'Coral, Peach, Gold, Warm Brown';
+        }
+
+        function saveAnalysis() {
+            // Save analysis results to localStorage
+            const analysis = {
+                skinTone: document.getElementById('skin-tone').textContent,
+                undertone: document.getElementById('undertone').textContent,
+                recommendedColors: document.getElementById('recommended-colors').textContent,
+                image: localStorage.getItem('capturedImage'),
+                timestamp: new Date().toISOString()
+            };
+            
+            // Get existing analyses or initialize empty array
+            let analyses = JSON.parse(localStorage.getItem('analyses') || '[]');
+            analyses.push(analysis);
+            localStorage.setItem('analyses', JSON.stringify(analyses));
+            
+            alert('Analysis saved successfully!');
+        }
+    </script>
+</body>
+</html> 

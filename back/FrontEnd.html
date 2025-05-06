@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fiawnt</title>
+  <link rel="stylesheet" href="style.css"/>
+  <script defer src="script.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    footer {
+      width: 100%;
+      background: #fff;
+      padding: 15px 0;
+      display: flex;
+      justify-content: space-around;
+      margin-top: 30px;
+      border-top: 1px solid #eee;
+    }
+    footer button {
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #666;
+      transition: color 0.3s ease;
+    }
+    footer button:hover {
+      color: #ff4081;
+    }
+    footer button span {
+      font-size: 0.75rem;
+      margin-top: 5px;
+      font-weight: 500;
+    }
+    .app-container {
+      padding-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <header>
+      <h1>Flawnt</h1>
+      <div class="icons">
+        <button><img src="Share.png" alt="" class="shar"></button>
+        <button onclick="window.location.href='history.html'"><img src="History.png" alt="" class="shar"></button>
+      </div>
+    </header>
+
+
+    <section class="analysis">
+      <h2>Get Analysis</h2>
+      <img src="Frontimg.jpg" alt="Model" class="model-img"/>
+      
+      
+    </section>
+
+    <section class="tips">
+      <h2>Selfie tips</h2>
+      <div class="tip"><img src="Camera.png" alt="" class="icons"> Please stand in front of good natural light.</div>
+      <div class="tip"><img src="Hairs.png" alt="" class="icons"> Pull hair back.</div>
+      <div class="tip"><img src="Glass.png" alt="" class="icons"> Take of your Glasses</div>
+    </section>
+
+    <section class="tips">
+      <button class="camera-btn" onclick="window.location.href='camera.html'">Open Camera</button>
+    </section>
+
+    <footer>
+      <button>🏠<span>Home</span></button>
+      <button>❓<span>Ask It</span></button>
+      <button>💖<span>Wishlist</span></button>
+      <button>👤<span>Profile</span></button>
+    </footer>
+  </div>
+</body>
+</html>

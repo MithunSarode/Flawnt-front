@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Results - Flawnt</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        .analysis-container {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .result-section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .color-palette {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        .color-swatch {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .makeup-recommendations {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .makeup-category {
+            background: #f8f8f8;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .makeup-category h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .makeup-list {
+            list-style: none;
+            padding: 0;
+        }
+        .makeup-list li {
+            padding: 5px 0;
+            color: #666;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .action-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        .retake-btn {
+            background: #ff4081;
+            color: white;
+        }
+        .save-btn {
+            background: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>Flawnt</h1>
+        </header>
+        <div class="analysis-container">
+            <div class="result-section">
+                <h2>Skin Tone Analysis</h2>
+                <div id="undertone-result"></div>
+            </div>
+
+            <div class="result-section">
+                <h2>Your Color Palette</h2>
+                <h3>Primary Colors</h3>
+                <div id="primary-colors" class="color-palette"></div>
+                
+                <h3>Secondary Colors</h3>
+                <div id="secondary-colors" class="color-palette"></div>
+                
+                <h3>Accent Colors</h3>
+                <div id="accent-colors" class="color-palette"></div>
+            </div>
+
+            <div class="result-section">
+                <h2>Makeup Recommendations</h2>
+                <div id="makeup-recommendations" class="makeup-recommendations"></div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="action-btn retake-btn" onclick="window.location.href='camera.html'">Take New Photo</button>
+                <button class="action-btn save-btn" onclick="window.location.href='FrontEnd.html'">Save Results</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            const result = JSON.parse(localStorage.getItem('analysisResult'));
+            if (!result) {
+                window.location.href = 'camera.html';
+                return;
+            }
+
+            // Display undertone result
+            document.getElementById('undertone-result').innerHTML = `
+                <h3>${result.undertone} Undertone</h3>
+                <p>${result.undertoneDesc}</p>
+            `;
+
+            // Display color palettes
+            function createColorSwatches(colors, containerId) {
+                const container = document.getElementById(containerId);
+                colors.forEach(color => {
+                    const swatch = document.createElement('div');
+                    swatch.className = 'color-swatch';
+                    swatch.style.backgroundColor = color;
+                    container.appendChild(swatch);
+                });
+            }
+
+            createColorSwatches(result.colorPalette.primary, 'primary-colors');
+            createColorSwatches(result.colorPalette.secondary, 'secondary-colors');
+            createColorSwatches(result.colorPalette.accent, 'accent-colors');
+
+            // Display makeup recommendations
+            const makeupContainer = document.getElementById('makeup-recommendations');
+            Object.entries(result.colorPalette.makeup).forEach(([category, items]) => {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = 'makeup-category';
+                categoryDiv.innerHTML = `
+                    <h3>${category.charAt(0).toUpperCase() + category.slice(1)}</h3>
+                    <ul class="makeup-list">
+                        ${items.map(item => `<li>${item}</li>`).join('')}
+                    </ul>
+                `;
+                makeupContainer.appendChild(categoryDiv);
+            });
+        };
+    </script>
+</body>
+</html> 

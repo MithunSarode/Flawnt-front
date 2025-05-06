@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera - Fiawnt</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        .camera-container {
+            text-align: center;
+            padding: 20px;
+        }
+        .camera-view {
+            width: 100%;
+            max-width: 640px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        .action-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .capture-btn {
+            background: #4CAF50;
+            color: white;
+        }
+        .back-btn {
+            background: #ff4081;
+            color: white;
+        }
+        footer {
+            width: 100%;
+            background: #fff;
+            padding: 15px 0;
+            display: flex;
+            justify-content: space-around;
+            margin-top: 30px;
+            border-top: 1px solid #eee;
+        }
+        footer button {
+            background: none;
+            border: none;
+            font-size: 1.4rem;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #666;
+            transition: color 0.3s ease;
+        }
+        footer button:hover {
+            color: #ff4081;
+        }
+        footer button span {
+            font-size: 0.75rem;
+            margin-top: 5px;
+            font-weight: 500;
+        }
+        .app-container {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>Flawnt</h1>
+        </header>
+        <div class="camera-container">
+            <h2>Take a Photo</h2>
+            <video id="camera-view" class="camera-view" autoplay playsinline></video>
+            <canvas id="canvas" style="display: none;"></canvas>
+            <div class="action-buttons">
+                <button class="action-btn back-btn" onclick="window.location.href='FrontEnd.html'">Back</button>
+                <button class="action-btn capture-btn" onclick="captureImage()">Capture</button>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <button>🏠<span>Home</span></button>
+        <button>❓<span>Ask It</span></button>
+        <button>💖<span>Wishlist</span></button>
+        <button>👤<span>Profile</span></button>
+    </footer>
+    <script>
+        let stream = null;
+        const video = document.getElementById('camera-view');
+        const canvas = document.getElementById('canvas');
+
+        // Request camera access when page loads
+        window.onload = async function() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        facingMode: 'environment',
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 }
+                    } 
+                });
+                video.srcObject = stream;
+            } catch (err) {
+                console.error('Error accessing camera:', err);
+                alert('Unable to access camera. Please make sure you have granted camera permissions.');
+            }
+        };
+
+        function captureImage() {
+            // Set canvas dimensions to match video
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            
+            // Draw the current video frame to canvas
+            const context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            // Convert canvas to base64 image
+            const imageData = canvas.toDataURL('image/jpeg');
+            
+            // Store the image in localStorage
+            localStorage.setItem('capturedImage', imageData);
+            
+            // Add to history
+            const history = JSON.parse(localStorage.getItem('captureHistory') || '[]');
+            history.unshift({
+                imageData: imageData,
+                timestamp: new Date().toISOString()
+            });
+            localStorage.setItem('captureHistory', JSON.stringify(history));
+            
+            // Stop the camera stream
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+            
+            // Redirect to captured image page
+            window.location.href = 'captured.html';
+        }
+
+        // Clean up camera stream when leaving the page
+        window.onbeforeunload = function() {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+        };
+    </script>
+</body>
+</html> 
